@@ -3,3 +3,5 @@ reference/
 data/
 .vscode/
 .DS_Store
+notebooks/examples/
+src/reflexion.py

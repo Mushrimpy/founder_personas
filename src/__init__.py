@@ -8,12 +8,15 @@ from sklearn.tree import DecisionTreeClassifier, plot_tree, export_text
 import matplotlib.pyplot as plt
 from copy import deepcopy
 
+from .preprocessing import DataPreprocessor
+from .clustering import MainClustering
+
 
 class FounderAnalyzer:
     def __init__(
         self,
-        n_main_clusters=5,
-        min_subcluster_size=15,
+        n_main_clusters=8,
+        min_subcluster_size=10,
         real_world_success_rate=0.019,
         success_column="success",
     ):
@@ -30,4 +33,17 @@ class FounderAnalyzer:
         self.main_cluster_labels = None
         self.X = None
 
-    from preprocessing import preprocess_data
+        self.preprocessor = DataPreprocessor(
+            real_world_success_rate=self.real_world_success_rate,
+            success_column=self.success_column,
+            imputer=self.imputer,
+            scaler=self.scaler,
+        )
+
+        self.main_clustering = MainClustering(
+            n_main_clusters=self.n_main_clusters,
+            min_subcluster_size=self.min_subcluster_size,
+            dataset_success_rate=self.dataset_success_rate,
+            success_column=self.success_column,
+            real_world_success_rate=self.real_world_success_rate,
+        )
