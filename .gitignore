@@ -3,5 +3,9 @@ reference/
 data/
 .vscode/
 .DS_Store
-notebooks/examples/
-src/reflexion.py
+notebook/examples/
+src/reflection.py
+src/pipeline.py
+src/tree.py
+
+**/__pycache__/

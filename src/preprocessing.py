@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 class DataPreprocessor:
@@ -67,10 +68,16 @@ class DataPreprocessor:
             "nope": 0,
             "unit": 1,
             "multi": 2,
+            "undisclosed": np.nan,
+            "nope": 0,
+            "l20": 0.4,
+            "50_150": 0.6,
+            "150_500": 0.8,
+            "g500": 1,
         }
 
         for column in df.columns:
-            df[column] = df[column].map(num_map).fillna(df[column])
+            df[column] = df[column].apply(lambda x: num_map[x] if x in num_map else x)
             df[column] = pd.to_numeric(df[column], errors="coerce")
 
         # Select numerical features
@@ -79,14 +86,23 @@ class DataPreprocessor:
             numerical_features != self.success_column
         ]
 
-        self.feature_names = numerical_features.tolist()
+        self.feature_names = [
+            feature
+            for feature in numerical_features.tolist()
+            if feature not in ["founder_uuid", "name", "org_name", "persona"]
+        ]
+
         print(f"Selected {len(self.feature_names)} features")
 
         # Let the imputer handle all missing values
         X = self.imputer.fit_transform(df[numerical_features])
         X = self.scaler.fit_transform(X)
 
-        return X, df, self.feature_names
+        return (
+            X,
+            df.drop(columns=["founder_uuid", "name", "org_name", "persona"]),
+            self.feature_names,
+        )
 
     def preprocess_data(self, df):
         success_samples, failure_samples = self._prepare_dataset(df)

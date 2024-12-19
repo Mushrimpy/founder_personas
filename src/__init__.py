@@ -16,7 +16,7 @@ class FounderAnalyzer:
     def __init__(
         self,
         n_main_clusters=8,
-        min_subcluster_size=10,
+        min_subcluster_size=20,
         real_world_success_rate=0.019,
         success_column="success",
     ):
